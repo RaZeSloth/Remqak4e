@@ -1,0 +1,26 @@
+{
+  "name": "easy-economy",
+  "version": "0.0.0",
+  "description": "THIS IS NOT AN AVALIBLE PACKAGE YET!!!!! IT HAS NO CODE",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/me2134/easy-economy.git"
+  },
+  "keywords": [
+    "discord.js-economy",
+    "economy",
+    "mrdiscord1",
+    "discord-eco",
+    "economy"
+  ],
+  "author": "Mr Discord1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/me2134/easy-economy/issues"
+  },
+  "homepage": "https://github.com/me2134/easy-economy#readme"
+}
