@@ -22,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/me2134/easy-economy/issues"
   },
-  "homepage": "https://github.com/me2134/easy-economy#readme"
+  "homepage": "https://github.com/me2134/easy-economy#readme",
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "quickmongo": "^3.0.2",
+    "swearfilter": "0.0.3"
+  }
 }
