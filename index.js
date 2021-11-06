@@ -1,6 +1,6 @@
-const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const Discord = require('discord.js');
 const { Database } = require('quickmongo');
+const dailyCollected = new Set();
 
 /**
  * Economy Options
@@ -9,21 +9,12 @@ const { Database } = require('quickmongo');
  * @prop {number} [moneyPerMinute=0] The amount of money to give automatically per minute. (Disabled by default and set to 0)
  */
 
-//we should do that was a number, so that it df's to 0. If it's not set, it'll be off by df
-//should we also do something like auto-profile on join?
-//The constuctor already takes care of it really though
-// what do you mean?
-//when a user earns money, it should be added to their profile right? Thus, it's automatic profile creation.
-//true
-//i gtg now, it's getting late. I'll definitely do it tomorrow with ya
-// :wave: (dammit this isn't discord)
-// haha cya!
 const economyOptions = {
     dailyMoney: 100,
     moneyPerMinute: 0
 }
 
-class Economy { // the constructor
+class Economy {
     /**
      * Create an instance of an Economy System.
      * @param {string} uri The MongoDB Database URI.
@@ -37,29 +28,39 @@ class Economy { // the constructor
         else if (!uri.startsWith("mongodb")) throw new Error("Invalid MongoDB URI!");
         const db = new Database(uri);
         this.db = db;
-            
-        db.on('ready', () => console.log('Connected to MongoDB')); // testing
-        db.on('error', err => console.error(err)); // also for testing
     }
 
     /**
      * Collect the daily money for a user.
-     * @param {Discord.GuildMember} member The user to collect the daily money for.
+     * @param {Discord.Message} message The message sent by the user.
      * @returns {Promise<number>} The new balance of the user.
      */
-    async daily(member) {
-        if (!member) throw new Error("No member was provided!");
-        let balance = await this.db.get(`economy_${member.user.id}.money`);
-        await db.add(`economy_${member.user.id}.money`, )
+    async daily(message) {
+        if (!message) throw new Error("No message parameter was provided!")
+        if (dailyCollected.has(message.author.id)) {
+            let alreadyCollected = new Discord.MessageEmbed()
+                .setColor("RED")
+                .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL())
+                .setTitle("❌ Daily Already Collected!")
+                .setDescription(`You have already collected your daily today!`)
+                .setTimestamp();
+            return message.channel.send({ embeds: [alreadyCollected] });
+        }
+        await db.add(`economy_${member.user.id}.money`, this.options.dailyMoney);
+        let newBalance = await db.get(`economy_${member.user.id}.money`);
+        dailyCollected.add(member.user.id);
+        let dailyEmbed = new Discord.MessageEmbed()
+            .setColor("GREEN")
+            .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL())
+            .setTitle("✅ Daily Collected!")
+            .setDescription(`You have collected $${this.options.dailyMoney}.\nYou now have $${newBalance}!`)
+            .setTimestamp();
+        message.channel.send({ embeds: [dailyEmbed] });
+        setTimeout(() => {
+            dailyCollected.delete(member.user.id);
+        }, 86400000) // 24 hours
+        return newBalance;
     }
 }
 
 module.exports = Economy;
-
-//later on we should add options, eg: how much for daily, available jobs and their success to get into em
-//options are pretty easy to do
-
-new Economy("mongodb://localhost:27017/test", {
-    dailyMoney: 100,
-    moneyPerMinute: 0
-});
