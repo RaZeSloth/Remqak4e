@@ -24,8 +24,7 @@
   },
   "homepage": "https://github.com/me2134/easy-economy#readme",
   "dependencies": {
-    "discord.js": "^13.3.1",
-    "quickmongo": "^3.0.2",
-    "swearfilter": "0.0.3"
+    "@willtda/quickmongo-v3": "^1.0.1",
+    "discord.js": "^13.3.1"
   }
 }
