@@ -45,7 +45,7 @@ class Economy {
                 .setDescription(`You have already collected your daily today!`)
                 .setTimestamp();
              message.channel.send({ embeds: [alreadyCollected] });
-             return;
+             return null;
         }
         await this.db.add(`economy_${message.member.user.id}.money`, this.options.dailyMoney);
         let newBalance = await this.db.get(`economy_${message.member.user.id}.money`);
