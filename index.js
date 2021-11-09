@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { Database } = require('quickmongo');
+const { Database } = require('@willtda/quickmongo-v3');
 const dailyCollected = new Set();
 
 /**
@@ -40,24 +40,25 @@ class Economy {
         if (dailyCollected.has(message.author.id)) {
             let alreadyCollected = new Discord.MessageEmbed()
                 .setColor("RED")
-                .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL())
+                .setAuthor(`${message.member.user.tag}`, message.member.displayAvatarURL())
                 .setTitle("❌ Daily Already Collected!")
                 .setDescription(`You have already collected your daily today!`)
                 .setTimestamp();
-            return message.channel.send({ embeds: [alreadyCollected] });
+             message.channel.send({ embeds: [alreadyCollected] });
+             return;
         }
-        await db.add(`economy_${member.user.id}.money`, this.options.dailyMoney);
-        let newBalance = await db.get(`economy_${member.user.id}.money`);
-        dailyCollected.add(member.user.id);
+        await this.db.add(`economy_${message.member.user.id}.money`, this.options.dailyMoney);
+        let newBalance = await this.db.get(`economy_${message.member.user.id}.money`);
+        dailyCollected.add(message.member.user.id);
         let dailyEmbed = new Discord.MessageEmbed()
             .setColor("GREEN")
-            .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL())
+            .setAuthor(`${message.member.user.tag}`, message.member.displayAvatarURL())
             .setTitle("✅ Daily Collected!")
             .setDescription(`You have collected $${this.options.dailyMoney}.\nYou now have $${newBalance}!`)
             .setTimestamp();
         message.channel.send({ embeds: [dailyEmbed] });
         setTimeout(() => {
-            dailyCollected.delete(member.user.id);
+            dailyCollected.delete(message.member.id);
         }, 86400000) // 24 hours
         return newBalance;
     }
