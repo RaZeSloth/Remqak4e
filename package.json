@@ -1,7 +1,7 @@
 {
   "name": "easy-economy",
   "version": "0.0.0",
-  "description": "THIS IS NOT AN AVALIBLE PACKAGE YET!!!!! IT HAS NO CODE",
+  "description": "THIS IS NOT AN AVAILABLE PACKAGE YET!!!!! IT HAS NO CODE",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
